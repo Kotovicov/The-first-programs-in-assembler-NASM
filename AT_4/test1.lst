@@ -1,0 +1,52 @@
+     1                                  
+     2                                  extern printb
+     3                                  
+     4                                  section .data
+     5 00000000 383132333435363738-     	var db "81234567890123456789012345678901"
+     5 00000009 393031323334353637-
+     5 00000012 383930313233343536-
+     5 0000001B 3738393031         
+     6                                  section .bss
+     7 00000000 ????????                	inform resd 1
+     8                                  
+     9                                  section .text
+    10                                  	global main
+    11                                  main:
+    12 00000000 55                      	push rbp
+    13 00000001 4889E5                  	mov rbp, rsp
+    14                                  
+    15                                  	; mov eax, [0x100]
+    16 00000004 B8[00000000]            	mov eax, var
+    17 00000009 890425[00000000]        	mov [inform], eax
+    18 00000010 0F05                    	syscall
+    19                                  
+    20 00000012 488B0425[00000000]      	mov rax,[inform]
+    21 0000001A 4889C7                  	mov rdi, rax
+    22 0000001D E8(00000000)            	call printb
+    23                                  	
+    24 00000022 8B0425[00000000]        	mov eax, [inform]
+    25 00000029 C1E017                  	sal eax,23
+    26 0000002C C1F817                  	sar eax,23 
+    27                                  
+    28 0000002F 4889C7                  	mov rdi, rax
+    29 00000032 E8(00000000)            	call printb
+    30                                  
+    31 00000037 8B1C25[00000000]        	mov ebx, [inform]
+    32 0000003E C1E30A                  	sal ebx,10
+    33 00000041 C1FB13                  	sar ebx,19
+    34                                  
+    35 00000044 4889DF                  	mov rdi, rbx
+    36 00000047 E8(00000000)            	call printb
+    37                                  
+    38                                  
+    39 0000004C 8B0C25[00000000]        	mov ecx, [inform]
+    40 00000053 C1F916                  	sar ecx,22
+    41                                  
+    42 00000056 4889CF                  	mov rdi, rcx
+    43 00000059 E8(00000000)            	call printb
+    44                                  
+    45                                  
+    46 0000005E C9                      	leave
+    47 0000005F C3                      	ret
+    48                                  	;mov rax, 60
+    49                                  	;syscall

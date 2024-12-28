@@ -1,0 +1,70 @@
+     1                                  section .data
+     2 00000000 323000                  	answer db "20",0
+     3 00000003 486F77206D61636820-     	question db "How mach 15 + 5 = ?",10,0
+     3 0000000C 3135202B2035203D20-
+     3 00000015 3F0A00             
+     4 00000018 56657279206E696365-     	good db "Very nice answer!",10,0
+     4 00000021 20616E73776572210A-
+     4 0000002A 00                 
+     5 0000002B 57726F6E6720616E73-     	notgood db "Wrong answer!",10,0
+     5 00000034 776572210A00       
+     6                                  	inputlen equ 2 ; длина буфера
+     7                                  
+     8                                  section .bss
+     9 00000000 ??????                  	input resb inputlen+1
+    10                                  	;res resb 10
+    11                                  
+    12                                  section .text
+    13                                  	global main
+    14                                  main:
+    15 00000000 55                      	push rbp
+    16 00000001 4889E5                  	mov rbp, rsp
+    17                                  	;-------------- вывод вопроса
+    18 00000004 B801000000              	mov rax, 1 ; write
+    19 00000009 BF01000000              	mov rdi, 1 ;stdout
+    20 0000000E 48BE-                   	mov rsi, question 
+    20 00000010 [0300000000000000] 
+    21 00000018 BA14000000              	mov rdx, 20
+    22 0000001D 0F05                    	syscall
+    23                                  	;-------------- ввод
+    24 0000001F 48BE-                   	mov rsi, input;input
+    24 00000021 [0000000000000000] 
+    25                                  	;mov rdx, inputlen+1
+    26 00000029 B800000000              	mov rax, 0 ; чтение
+    27 0000002E BF01000000              	mov rdi, 1 ; стандартный ввод
+    28 00000033 0F05                    	syscall
+    29                                  
+    30                                  	;mov rax, [res]
+    31                                  
+    32                                  	;mov rsi, rax 
+    33                                  	;mov rax, 1 ; write
+    34                                  	;mov rdi, 1 ;stdout
+    35                                  	;mov rdx, 20
+    36                                  	;syscall
+    37                                  	;-------------- проверка 20=input ?
+    38                                  	;movzx rsi, byte [answer]
+    39                                  
+    40 00000035 668B0425[00000000]      	mov ax, [answer]
+    41 0000003D 668B1C25[00000000]      	mov bx, [input]
+    42 00000045 6639D8                  	cmp ax, bx
+    43 00000048 741D                    	je greater ; если cmp выполнено -> перейти в greater
+    44                                  ; не выполнено cmp
+    45 0000004A B801000000              mov rax, 1 ; write
+    46 0000004F BF01000000              mov rdi, 1 ; stdout
+    47 00000054 48BE-                   mov rsi, notgood 
+    47 00000056 [2B00000000000000] 
+    48 0000005E BA0E000000              mov rdx, 14
+    49 00000063 0F05                    syscall
+    50 00000065 EB1B                    	jmp exit
+    51                                  greater: ; -> если выполнено cmp
+    52 00000067 B801000000              	mov rax, 1 ; write
+    53 0000006C BF01000000              	mov rdi, 1 ;stdout
+    54 00000071 48BE-                   	mov rsi, good 
+    54 00000073 [1800000000000000] 
+    55 0000007B BA12000000              	mov rdx, 18
+    56 00000080 0F05                    	syscall
+    57                                  
+    58                                  exit:
+    59 00000082 4889EC                  mov rsp,rbp
+    60 00000085 5D                      pop rbp
+    61 00000086 C3                      ret
